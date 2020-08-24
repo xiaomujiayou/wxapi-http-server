@@ -17,7 +17,6 @@ mapper:
   mappers:
     - tk.mybatis.mapper.common.Mapper
   notEmpty: true
-#  identity: MYSQL
 
 #分页插件
 pagehelper:
