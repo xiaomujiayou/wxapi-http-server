@@ -3,8 +3,6 @@ package com.xm.wechat_robot.controller;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.xm.wechat_robot.config.ClientMsgMqConfig;
-import com.xm.wechat_robot.config.WxMsgMqConfig;
 import com.xm.wechat_robot.message.ClientMsgQueue;
 import com.xm.wechat_robot.message.WxMsgQueue;
 import com.xm.wechat_robot.serialize.entity.WcMachineCodeEntity;
@@ -16,16 +14,12 @@ import com.xm.wechat_robot.util.MsgEnum;
 import com.xm.wechat_robot.util.R;
 import com.xm.wechat_robot.util.WsUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -44,10 +38,6 @@ public class CollectWss {
 
     @Autowired
     public void setMechineIdService(MechineCodeService mechineCodeService){ CollectWss.mechineCodeService = mechineCodeService; }
-    //@Autowired
-    //private void setRabbitTemplate(RabbitTemplate rabbitTemplate){
-    //    CollectWss.rabbitTemplate = rabbitTemplate;
-    //}
     @Autowired
     private void setWxAccountService(WxAccountService wxAccountService){
         CollectWss.wxAccountService = wxAccountService;
@@ -89,10 +79,8 @@ public class CollectWss {
         JSONObject jsonMsg = JSON.parseObject(message);
         jsonMsg.put("machineId",SESSION_MACHINE_STORE.get(session.getId()).getId());
         if(jsonMsg.getString("space").equals("user_msg")){
-        //    rabbitTemplate.convertAndSend(WxMsgMqConfig.EXCHANGE,WxMsgMqConfig.KEY_WX_MSG,jsonMsg);
             WxMsgQueue.WX_MSG_QUEUE.put(jsonMsg);
         }
-        //rabbitTemplate.convertAndSend(ClientMsgMqConfig.EXCHANGE,ClientMsgMqConfig.KEY_CLIENT_MSG,jsonMsg);
         ClientMsgQueue.CLIENT_MSG_QUEUE.put(jsonMsg);
     }
     @OnError
