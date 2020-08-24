@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    url: jdbc:sqlite::resource:sqlite\w_robot   #此处仅供参考，推荐单独放一个固定目录
+
+logging:
+  config: classpath:log/logback-spring.xml
+  logPath: D:\java\data\log\wechat_robot\main
+  logLevel: debug

@@ -1,9 +1,7 @@
 server:
-  port: 8202
+  port: 8202  #服务端口
 
 spring:
-  application:
-    name: wechat-robot
   profiles:
     active: dev
 
