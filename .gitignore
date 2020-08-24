@@ -1,0 +1,13 @@
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+/target/
+/src/test/java/*
+rebel.xml
+.gitignore
+application-dev.yml
+application-prod.yml
