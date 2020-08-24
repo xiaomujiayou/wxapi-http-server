@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xm.wechat_robot.mapper.WcWxMsgMapper" >
+  <resultMap id="BaseResultMap" type="com.xm.wechat_robot.serialize.entity.WcWxMsgEntity" >
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="account_wxid" property="accountWxid" jdbcType="VARCHAR" />
+    <result column="chat_room" property="chatRoom" jdbcType="INTEGER" />
+    <result column="chat_room_wxid" property="chatRoomWxid" jdbcType="VARCHAR" />
+    <result column="target_user_wxid" property="targetUserWxid" jdbcType="VARCHAR" />
+    <result column="msg_from" property="msgFrom" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="msg" property="msg" jdbcType="VARCHAR" />
+    <result column="msg_resource" property="msgResource" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>

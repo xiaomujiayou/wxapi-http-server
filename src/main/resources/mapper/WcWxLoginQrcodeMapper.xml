@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xm.wechat_robot.mapper.WcWxLoginQrcodeMapper" >
+  <resultMap id="BaseResultMap" type="com.xm.wechat_robot.serialize.entity.WcWxLoginQrcodeEntity" >
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="machine_id" property="machineId" jdbcType="INTEGER" />
+    <result column="p_id" property="pId" jdbcType="VARCHAR" />
+    <result column="tcp_id" property="tcpId" jdbcType="VARCHAR" />
+    <result column="qrcode" property="qrcode" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>
