@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.xm</groupId>
     <artifactId>wechat_robot</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>wechat_robot</name>
     <description>Demo project for Spring Boot</description>
 
