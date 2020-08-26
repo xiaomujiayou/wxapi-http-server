@@ -24,12 +24,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 采集消息
+ * 采集控制端消息
  */
 @Slf4j
 @Component
 @ServerEndpoint("/client/{machineCode}")
-public class CollectWss {
+public class ClientWss {
 
     private static MechineCodeService mechineCodeService;
     //private static RabbitTemplate rabbitTemplate;
@@ -37,14 +37,14 @@ public class CollectWss {
     private static WxQrcodeService wxQrcodeService;
 
     @Autowired
-    public void setMechineIdService(MechineCodeService mechineCodeService){ CollectWss.mechineCodeService = mechineCodeService; }
+    public void setMechineIdService(MechineCodeService mechineCodeService){ ClientWss.mechineCodeService = mechineCodeService; }
     @Autowired
     private void setWxAccountService(WxAccountService wxAccountService){
-        CollectWss.wxAccountService = wxAccountService;
+        ClientWss.wxAccountService = wxAccountService;
     }
     @Autowired
     private void setWxQrcodeService(WxQrcodeService wxQrcodeService){
-        CollectWss.wxQrcodeService = wxQrcodeService;
+        ClientWss.wxQrcodeService = wxQrcodeService;
     }
 
     //会话中心
@@ -75,7 +75,7 @@ public class CollectWss {
     }
     @OnMessage
     public void onMessage(Session session,String message) throws InterruptedException {
-        log.debug("收到客户端消息：{}",message);
+        log.debug("收到控制端消息：{}",message);
         JSONObject jsonMsg = JSON.parseObject(message);
         jsonMsg.put("machineId",SESSION_MACHINE_STORE.get(session.getId()).getId());
         if(jsonMsg.getString("space").equals("user_msg")){

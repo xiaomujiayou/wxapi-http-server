@@ -19,9 +19,14 @@ public interface WxUserMsgService {
     public void receiveMsg(String accountWxid, WxClientMsg<UserMsg> userMsg);
 
     /**
-     * 微信消息推送、回调
+     * 微信消息推送、回调 http方式
      */
-    public void callBack(Integer accountId,WxClientMsg<UserMsg> userMsg);
+    public void httpCallBack(Integer accountId,WxClientMsg<UserMsg> userMsg);
+
+    /**
+     * 微信消息推送、回调 websocket方式
+     */
+    public void wsCallBack(Integer accountId,WxClientMsg<UserMsg> userMsg);
 
     /**
      * 获取消息

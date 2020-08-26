@@ -3,6 +3,9 @@ package com.xm.wechat_robot.constance;
 
 import com.xm.wechat_robot.serialize.bo.client.*;
 
+/**
+ * 控制端消息类型
+ */
 public enum ClientMsgTypeEnum {
     QRCODE_CHANGE("login_qr_change","login_qr_code", LoginQrChange.class),
     ON_LOGIN("on_login","on_login", OnLogin.class),

@@ -43,7 +43,8 @@ public class WxMsgQueue implements Runnable{
                 WxClientMsg msg = wxMsg.toJavaObject(WxClientMsg.class);
                 msg.setValue(wxMsg.getObject("value", UserMsg.class));
                 Integer accountId = wxAccountService.getAccountId(msg.getMachineId(), msg.getTcpId()).getId();
-                wxUserMsgService.callBack(accountId,msg);
+                wxUserMsgService.wsCallBack(accountId,msg);
+                wxUserMsgService.httpCallBack(accountId,msg);
             }catch (EnumConstantNotPresentException e){
                 log.warn(e.getMessage());
             }catch (Exception e){

@@ -1,14 +1,19 @@
 package com.xm.wechat_robot.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.XmlUtil;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
+import com.xm.wechat_robot.constance.ActionTypeEnum;
+import com.xm.wechat_robot.controller.WxActionWss;
 import com.xm.wechat_robot.mapper.WcMachineCodeMapper;
 import com.xm.wechat_robot.mapper.WcWxAccountMapper;
 import com.xm.wechat_robot.mapper.WcWxMsgMapper;
+import com.xm.wechat_robot.serialize.bo.action.ActionMsg;
+import com.xm.wechat_robot.serialize.bo.action.UserMsgActionMsg;
 import com.xm.wechat_robot.serialize.bo.client.UserMsg;
 import com.xm.wechat_robot.serialize.bo.client.WxClientMsg;
 import com.xm.wechat_robot.serialize.entity.WcMachineCodeEntity;
@@ -55,28 +60,47 @@ public class WxUserMsgServiceImpl implements WxUserMsgService {
     }
 
     @Override
-    public void callBack(Integer accountId, WxClientMsg<UserMsg> userMsg) {
-        WcWxAccountEntity accountEntity = wcWxAccountMapper.selectByPrimaryKey(accountId);
+    public void httpCallBack(Integer accountId, WxClientMsg<UserMsg> userMsg) {
         WcMachineCodeEntity machineCodeEntity = wcMachineCodeMapper.selectByPrimaryKey(userMsg.getMachineId());
         if(StrUtil.isBlank(machineCodeEntity.getMsgCallBackUrl())) {
             log.warn("客户端：{} 尚未配置微信消息回调地址", machineCodeEntity.getMachineCode());
             return;
         }
-        WcWxMsgVo wxMsgVo = new WcWxMsgVo();
-        wxMsgVo.setMachineCode(machineCodeEntity.getMachineCode());
-        wxMsgVo.setClientId(accountEntity.getTcpId());
-        wxMsgVo.setAccountWxid(accountEntity.getWxid());
-        wxMsgVo.setIsGroupMsg(userMsg.getValue().getChatRoom().equals("1"));
-        wxMsgVo.setGroupWxid(userMsg.getValue().getChatRoomWxid());
-        wxMsgVo.setTargetUserWxid(userMsg.getValue().getTargetUserWxid());
-        wxMsgVo.setMsgType(userMsg.getValue().getType());
-        wxMsgVo.setAtUserListWxids(praseAtWxid(Base64.decodeStr(userMsg.getValue().getMsgInfo().getMsgResource())));
-        wxMsgVo.setMsgBody(userMsg.getValue().getMsgInfo().getMsg());
+        ActionMsg actionMsg = praseToVo(machineCodeEntity,accountId,userMsg);
         HttpUtil.createPost(machineCodeEntity.getMsgCallBackUrl())
                 .contentType("application/json")
                 .charset("utf-8")
-                .body(JSON.toJSONString(wxMsgVo))
+                .body(JSON.toJSONString(actionMsg))
                 .execute();
+    }
+
+    @Override
+    public void wsCallBack(Integer accountId, WxClientMsg<UserMsg> userMsg) {
+        WcMachineCodeEntity machineCodeEntity = wcMachineCodeMapper.selectByPrimaryKey(userMsg.getMachineId());
+        ActionMsg actionMsg = praseToVo(machineCodeEntity,accountId,userMsg);
+        WxActionWss.sendActionMsg(actionMsg);
+    }
+
+    private ActionMsg praseToVo(WcMachineCodeEntity machineCodeEntity,Integer accountId, WxClientMsg<UserMsg> userMsg){
+        WcWxAccountEntity accountEntity = wcWxAccountMapper.selectByPrimaryKey(accountId);
+        UserMsgActionMsg userMsgAction = new UserMsgActionMsg();
+        userMsgAction.setMachineCode(machineCodeEntity.getMachineCode());
+        userMsgAction.setClientId(accountEntity.getTcpId());
+        userMsgAction.setAccountWxid(accountEntity.getWxid());
+        userMsgAction.setIsGroupMsg(userMsg.getValue().getChatRoom().equals(1));
+        userMsgAction.setGroupWxid(userMsg.getValue().getChatRoomWxid());
+        userMsgAction.setTargetUserWxid(userMsg.getValue().getTargetUserWxid());
+        userMsgAction.setMsgType(userMsg.getValue().getType());
+        userMsgAction.setMsgFrom(userMsg.getValue().getMsgFrom());
+        userMsgAction.setAtUserListWxids(praseAtWxid(Base64.decodeStr(userMsg.getValue().getMsgInfo().getMsgResource())));
+        userMsgAction.setMsgBody(userMsg.getValue().getMsgInfo().getMsg());
+
+        ActionMsg<UserMsgActionMsg> actionMsg = new ActionMsg<>();
+        actionMsg.setMachineCode(machineCodeEntity.getMachineCode());
+        actionMsg.setClientId(userMsg.getTcpId());
+        actionMsg.setType(ActionTypeEnum.ON_USER_MSG.getType());
+        actionMsg.setAction(userMsgAction);
+        return actionMsg;
     }
 
     @Override

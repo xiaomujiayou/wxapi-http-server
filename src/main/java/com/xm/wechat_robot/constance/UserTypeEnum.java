@@ -1,5 +1,8 @@
 package com.xm.wechat_robot.constance;
 
+/**
+ * 微信好友类型
+ */
 public enum  UserTypeEnum {
     USER(1),
     GROUP(2),

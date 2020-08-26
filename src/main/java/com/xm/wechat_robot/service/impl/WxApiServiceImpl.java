@@ -2,7 +2,7 @@ package com.xm.wechat_robot.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
-import com.xm.wechat_robot.controller.CollectWss;
+import com.xm.wechat_robot.controller.ClientWss;
 import com.xm.wechat_robot.mapper.WcWxAccountMapper;
 import com.xm.wechat_robot.mapper.WcWxLoginQrcodeMapper;
 import com.xm.wechat_robot.serialize.bo.server.CloseClient;
@@ -107,20 +107,20 @@ public class WxApiServiceImpl implements WxApiService {
     }
 
     private WcMachineCodeEntity getMachineId(String machineCode) {
-        Session session = CollectWss.MACHINE_SESSION_STORE.get(machineCode);
+        Session session = ClientWss.MACHINE_SESSION_STORE.get(machineCode);
         if (session == null)
             throw new GlobleException(MsgEnum.AUTH_CHILD_NOT_LOGIN, "客户端未连接或网络中断");
-        WcMachineCodeEntity machineCodeEntity = CollectWss.SESSION_MACHINE_STORE.get(session.getId());
+        WcMachineCodeEntity machineCodeEntity = ClientWss.SESSION_MACHINE_STORE.get(session.getId());
         return machineCodeEntity;
     }
 
     private void sendServerMsg(String machineCode, String accountWxid, String space, Object msg) {
-        Session session = CollectWss.MACHINE_SESSION_STORE.get(machineCode);
+        Session session = ClientWss.MACHINE_SESSION_STORE.get(machineCode);
         if (session == null)
             throw new GlobleException(MsgEnum.AUTH_CHILD_NOT_LOGIN, "客户端未连接或网络中断");
         if (!session.isOpen())
             throw new GlobleException(MsgEnum.NET_DISCONNECT_ERROR, "与客户端失去连接");
-        WcMachineCodeEntity machineCodeEntity = CollectWss.SESSION_MACHINE_STORE.get(session.getId());
+        WcMachineCodeEntity machineCodeEntity = ClientWss.SESSION_MACHINE_STORE.get(session.getId());
         WxServerMsg wxServerMsg = new WxServerMsg();
         if (StrUtil.isNotBlank(accountWxid)) {
             WcWxAccountEntity accountEntity = wxAccountService.getWxAccount(machineCodeEntity.getId(), accountWxid);

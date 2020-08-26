@@ -48,6 +48,11 @@ public class WcWxMsgVo {
     private String msgType;
 
     /**
+     * 消息方向(0:我发出去的,1:我接收的)
+     */
+    private Integer msgFrom;
+
+    /**
      * At的用户wxid列表“,”号间隔
      * @mock wxid_9b9f4jowb10722,wxid_9b9f4jowb10721
      */

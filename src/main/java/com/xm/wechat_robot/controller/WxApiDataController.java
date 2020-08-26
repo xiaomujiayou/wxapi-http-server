@@ -48,7 +48,7 @@ public class WxApiDataController {
      */
     @GetMapping("/login/qrcode")
     public Msg<WcWxQrcodeVo> getQrcode(@Valid WxApiQrcodeForm wxApiQrcodeForm, BindingResult bindingResult){
-        WcMachineCodeEntity codeEntity = CollectWss.getValidMachineCode(wxApiQrcodeForm.getMachineCode(),true,false);
+        WcMachineCodeEntity codeEntity = ClientWss.getValidMachineCode(wxApiQrcodeForm.getMachineCode(),true,false);
         WcWxLoginQrcodeEntity entity = new WcWxLoginQrcodeEntity();
         entity.setMachineId(codeEntity.getId());
         entity.setState(1);
@@ -68,7 +68,7 @@ public class WxApiDataController {
      */
     @GetMapping("/account/list")
     public Msg<List<WcWxAccountVo>> accountList(@Valid WxApiAccountListForm wxApiAccountListForm, BindingResult bindingResult){
-        WcMachineCodeEntity codeEntity = CollectWss.getValidMachineCode(wxApiAccountListForm.getMachineCode(),true,false);
+        WcMachineCodeEntity codeEntity = ClientWss.getValidMachineCode(wxApiAccountListForm.getMachineCode(),true,false);
         return R.sucess(wxAccountService.getAllList(codeEntity.getId(),null).stream().map(o -> {
             WcWxAccountVo vo = new WcWxAccountVo();
             vo.setWxid(o.getWxid());
@@ -89,7 +89,7 @@ public class WxApiDataController {
      */
     @GetMapping("/user/list")
     public Msg<PageBean<WcWxUserVo>> userList(@Valid WxApiUserListForm wxApiUserListForm, BindingResult bindingResult){
-        WcMachineCodeEntity codeEntity = CollectWss.getValidMachineCode(wxApiUserListForm.getMachineCode(),true,false);
+        WcMachineCodeEntity codeEntity = ClientWss.getValidMachineCode(wxApiUserListForm.getMachineCode(),true,false);
         PageBean<WcWxUserEntity> pageBean = wxUserService.getAccountUserList(
                 codeEntity.getId(),
                 wxApiUserListForm.getAccountWxid(),
@@ -125,7 +125,7 @@ public class WxApiDataController {
      */
     @GetMapping("/group/user/list")
     public Msg<PageBean<WcWxGroupUserVo>> groupUserList(@Valid WxApiGroupUserListForm wxApiGroupUserListForm, BindingResult bindingResult){
-        WcMachineCodeEntity codeEntity = CollectWss.getValidMachineCode(wxApiGroupUserListForm.getMachineCode(),true,false);
+        WcMachineCodeEntity codeEntity = ClientWss.getValidMachineCode(wxApiGroupUserListForm.getMachineCode(),true,false);
         Integer accountId = wxAccountService.getAccountIdByWxid(codeEntity.getId(), wxApiGroupUserListForm.getAccountWxid());
         PageBean<WcWxGroupUserEntity> pageBean = wxGroupUserService.getGroupUserList(
                 accountId,
@@ -163,7 +163,7 @@ public class WxApiDataController {
                 wxApiUserMsgListForm.getPageNum(),
                 wxApiUserMsgListForm.getPageSize());
         PageBean<WcWxMsgVo> result = new PageBean<>(msgEntityList);
-        WcMachineCodeEntity machineCodeEntity = CollectWss.getValidMachineCode(wxApiUserMsgListForm.getMachineCode(),true,false);
+        WcMachineCodeEntity machineCodeEntity = ClientWss.getValidMachineCode(wxApiUserMsgListForm.getMachineCode(),true,false);
         WcWxAccountEntity accountRecord = new WcWxAccountEntity();
         accountRecord.setWxid(wxApiUserMsgListForm.getAccountWxid());
         WcWxAccountEntity accountEntity = wcWxAccountMapper.selectOne(accountRecord);
