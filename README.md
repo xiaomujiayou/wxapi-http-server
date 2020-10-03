@@ -56,6 +56,15 @@
 
 通过`获取用户消息`接口轮番查询 [接口地址](https://xiaomujiayou.github.io/wxapi/#_1_5_%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E8%81%8A%E5%A4%A9%E4%BF%A1%E6%81%AF%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BD%95 "接口地址")
 
+### 常见问题：
+
+- 控制端启动报错：无法找到指定DLL库文件***。安装openssl 
+[下载](https://slproweb.com/download/Win32OpenSSL_Light-1_1_1h.exe "下载")
+
+- 以管理员的身份运行控制端。
+
+
+
 
 ------------
 联系方式：
