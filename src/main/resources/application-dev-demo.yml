@@ -2,8 +2,8 @@ spring:
   datasource:
     driver-class-name: org.sqlite.JDBC
 #    url: jdbc:sqlite:sqlite.db   #默认jar包同级目录，此处仅供参考，推荐单独放一个固定目录
-    url: jdbc:sqlite:D:\java\data\db\wechat_robot\sqlite.db
+    url: jdbc:sqlite:D:\java\data\db\wechat_robot\sqlite.db #替换为本机sqlite.db存访路径
 logging:
   config: classpath:log/logback-spring.xml
-  logPath: D:\java\data\log\wxapi
-  logLevel: debug
+  logPath: D:\java\data\log\wxapi   #日志存访路径
+  logLevel: debug    #日志级别
